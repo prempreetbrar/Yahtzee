@@ -3,14 +3,19 @@ function scoreUpperSection(number, dice) {
 }
 
 function threeOfAKind(dice) {
-  if (dice.some(number => dice.count(number) >= 3))
-    return array.reduce((total, number) => total + number);
+  console.log("threeOfAKind is invoked")
+  if (dice.some(number => count(dice, number) >= 3))
+    return dice.reduce((total, number) => total + number);
   return 0;
+}
+
+function count(dice, number) {
+  return dice.filter(n => n === number).length;
 }
 
 function fourOfAKind(dice) {
   if (dice.some(number => dice.count(number) >= 4))
-    return array.reduce((total, number) => total + number);
+    return dice.reduce((total, number) => total + number);
   return 0;
 }
 
@@ -42,3 +47,5 @@ function largeStraight(dice) {
 function yahtzee(dice) {
   if (Set(dice).length === 1) return 50;
 }
+
+export {scoreUpperSection, threeOfAKind, fourOfAKind, fullHouse, smallStraight, largeStraight, yahtzee};

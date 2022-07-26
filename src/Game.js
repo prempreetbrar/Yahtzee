@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { Box, Paper } from "@mui/material";
-
+import {scoreUpperSection, threeOfAKind, fourOfAKind, fullHouse, smallStraight, largeStraight, yahtzee} from "./ScoreCalculator";
 import Dice from "./Dice.js";
 import Scoreboard from './Scoreboard.js';
 
@@ -43,8 +43,8 @@ export default function Game() {
     ]);
   }
 
-  function updateScore(fn) {
-
+  function updateScore(scoreName, fn) {
+    setScores({...scores, [scoreName]: fn(dice)});
   }
 
   return (
@@ -59,11 +59,21 @@ export default function Game() {
             alignItems: "center",
           }}
         >
-          <Scoreboard scores={scores}/>
+          <Scoreboard scores={scores} updateScore={updateScore}/>
           <Dice dice={dice} toggleLockOnDie={toggleLockOnDie}/>
           <button onClick={rollDice}>Roll</button>
         </Paper>
       </Box>
     </>
   )
+}
+
+function executeFunctionByName(functionName, context /*, args */) {
+  var args = Array.prototype.slice.call(arguments, 2);
+  var namespaces = functionName.split(".");
+  var func = namespaces.pop();
+  for(var i = 0; i < namespaces.length; i++) {
+    context = context[namespaces[i]];
+  }
+  return context[func].apply(context, args);
 }
