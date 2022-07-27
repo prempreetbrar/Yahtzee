@@ -4,6 +4,8 @@ import { Box, Paper } from "@mui/material";
 import {scoreUpperSection, threeOfAKind, fourOfAKind, fullHouse, smallStraight, largeStraight, yahtzee} from "./ScoreCalculator";
 import Dice from "./Dice.js";
 import Scoreboard from './Scoreboard.js';
+import "./Game.css"
+import Button from '@mui/material/Button';
 
 const NUM_OF_DICE = 5;
 const SIDES_ON_DIE = 6;
@@ -49,31 +51,30 @@ export default function Game() {
 
   return (
     <>
-      <Box display="flex" flexDirection="row">
         <Paper 
           elevation={3}
           sx={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <Scoreboard scores={scores} updateScore={updateScore}/>
-          <Dice dice={dice} toggleLockOnDie={toggleLockOnDie}/>
-          <button onClick={rollDice}>Roll</button>
+          <h2 className="Game-title">Yahtzee!</h2>
+            <Box display="flex" flexDirection="row">
+              <Scoreboard scores={scores} updateScore={updateScore}/>
+              <Dice dice={dice} toggleLockOnDie={toggleLockOnDie}/>
+              <Button variant="contained" sx={
+                {fontFamily: "Roboto", 
+                fontWeight: 300, 
+                fontSize: "2rem", 
+                backgroundColor: "#415A77",
+                ":hover": {
+                  backgroundColor: "#0D1B2A"
+                } ,
+                borderRadius: "0.5rem"}}onClick={rollDice}>Roll</Button>
+            </Box>
         </Paper>
-      </Box>
     </>
   )
-}
-
-function executeFunctionByName(functionName, context /*, args */) {
-  var args = Array.prototype.slice.call(arguments, 2);
-  var namespaces = functionName.split(".");
-  var func = namespaces.pop();
-  for(var i = 0; i < namespaces.length; i++) {
-    context = context[namespaces[i]];
-  }
-  return context[func].apply(context, args);
 }
