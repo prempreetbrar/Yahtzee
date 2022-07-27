@@ -26,7 +26,8 @@ export default function Game() {
     fullHouse: null,
     smallStraight: null,
     largeStraight: null,
-    chance: null
+    chance: null,
+    yahtzee: null
   });
 
   function rollDice(event) {
@@ -70,7 +71,7 @@ export default function Game() {
                 fontSize: "2rem", 
                 backgroundColor: "#415A77",
                 ":hover": {
-                  backgroundColor: "#0D1B2A"
+                  backgroundColor: "#1B263B"
                 } ,
                 borderRadius: "0.5rem"}}onClick={rollDice}>Roll</Button>
             </Box>
