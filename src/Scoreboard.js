@@ -4,7 +4,7 @@ import {scoreUpperSection, threeOfAKind, fourOfAKind, fullHouse, smallStraight, 
 export default function Scoreboard({scores, updateScore}) {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-      <h2 textAlign="center" fontWeight="bold">Upper</h2>
+      <h2 style={{fontWeight: 300}}>Upper</h2>
       {
         Object.entries(scores).map(([key, value]) => 
           <Box display="flex" flexDirection="row" borderBottom="black solid 0.75px" onClick={() => updateScore(key, getFunctionBasedOnName(key))}>
