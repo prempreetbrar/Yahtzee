@@ -59,7 +59,8 @@ export default function Game() {
 
   return (
     <>
-        <Paper 
+      <Box display="flex" alignItems="center" justifyContent="center" height="100vh">
+      <Paper 
           elevation={3}
           sx={{
             display: "flex",
@@ -86,6 +87,8 @@ export default function Game() {
               </Box>
             </Box>
         </Paper>
+      </Box>
+        
     </>
   )
 }
