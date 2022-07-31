@@ -1,11 +1,9 @@
-import './App.css';
-
 import Game from "./Game"
 
-function App() {
+
+
+export default function App() {
   return (
     <Game className="App"/>
   );
 }
-
-export default App;

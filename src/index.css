@@ -5,3 +5,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+h2 {
+  font-weight: 100;
+  font-size: 2em;
+  border-bottom: 2px solid rgba(76, 181, 174, 1);
+}

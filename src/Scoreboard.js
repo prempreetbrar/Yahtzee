@@ -1,5 +1,6 @@
 import { Box } from "@mui/system"
 import {scoreUpperSection, threeOfAKind, fourOfAKind, fullHouse, smallStraight, largeStraight, chance, yahtzee} from "./ScoreCalculator";
+import "./Scoreboard.css";
 
 export default function Scoreboard({scores, updateScore}) {
   return (
@@ -7,9 +8,12 @@ export default function Scoreboard({scores, updateScore}) {
       <h2 style={{fontWeight: 300}}>Upper</h2>
       {
         Object.entries(scores).map(([key, value]) => 
-          <Box display="flex" flexDirection="row" borderBottom="black solid 0.75px" onClick={value ? undefined : () => updateScore(key, getFunctionBasedOnName(key))}>
-            <Box width="10rem" fontWeight={300} textAlign="left">{key.charAt(0).toUpperCase() + key.replace(/([A-Z])/g, " $1").slice(1)}</Box>
-            <Box sx={{flexGrow: 1}}>{value}</Box>
+          <Box className={`ScoreRow ${value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`} display="flex" flexDirection="row" borderBottom="black solid 0.75px" onClick={value ? undefined : () => updateScore(key, getFunctionBasedOnName(key))}>
+            <Box width="10rem" fontWeight={300} textAlign="left"
+              sx={{textDecoration: `${value !== null ? "line-through" : ""}`}}
+            >{key.charAt(0).toUpperCase() + key.replace(/([A-Z])/g, " $1").slice(1)}</Box>
+            <Box sx={{flexGrow: 1, 
+              }}>{value !== null ? value : "1 point per 1"}</Box>
           </Box>
         )
       }
