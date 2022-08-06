@@ -1,22 +1,23 @@
 import "./Game.css"
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Paper, Button } from "@mui/material";
 
 import Dice from "./Dice.js";
 import Scoreboard from './Scoreboard.js';
 
-
 const NUM_OF_DICE = 5;
 const SIDES_ON_DIE = 6;
 const STARTING_NUM_OF_ROLLS = 3;
+const MILLISECONDS_PER_ROLL = 1000;
+
 
 export default function Game() {
-  const isMounted = useRef(false);
   const [dice, setDice] = useState(Array(NUM_OF_DICE).fill(1));
+  const [locked, setLocked] = useState(Array(NUM_OF_DICE).fill(false));
+
   const [rollsLeft, setRollsLeft] = useState(STARTING_NUM_OF_ROLLS);
   const [isRolling, setIsRolling] = useState(false);
-  const [locked, setLocked] = useState(Array(NUM_OF_DICE).fill(false));
   const [scores, setScores] = useState({
     ones: null,
     twos: null,
@@ -34,29 +35,43 @@ export default function Game() {
     yahtzee: null
   });
 
+
   useEffect(() => {
+    // if there's no rolls left, we don't want to give the illusion that the dice
+    // can still be unlocked and the values can change
     if (rollsLeft === 0) {
-      setLocked(
-        locked.map(isLocked => true)
-      )
+      setLocked(locked.map(isLocked => true));
     }
-  }, [rollsLeft])
+  }, [rollsLeft]);
+
+  useEffect(() => {
+    // we need to use one of the rolls on a new turn to give the user new dice
+    if (rollsLeft === STARTING_NUM_OF_ROLLS) {
+      rollDice();
+    }
+  }, [rollsLeft]);
+
 
   function rollDice(event) {
     setIsRolling(true);
+
+    // we wait the length of the spin animation to make the dice
+    // look like they are spinning before we roll
     setTimeout(() => {
-      setDice(dice.map((die, i) => {
-        if (locked[i]) {
-          return die
-        };
-        const randomNumber = Math.floor(Math.random() * SIDES_ON_DIE) + 1;
-        return randomNumber;
-      }))
-      setRollsLeft(rollsLeft => rollsLeft - 1)
+      setDice(dice.map((dieValue, i) => rollDie(dieValue, i)));
+      setRollsLeft(rollsLeft => rollsLeft - 1);
       setIsRolling(false);
     }
-    , 1000)
+    , MILLISECONDS_PER_ROLL);
   }
+
+  function rollDie(dieValue, i) {
+    if (locked[i]) 
+      return dieValue;
+    const randomNumber = Math.floor(Math.random() * SIDES_ON_DIE) + 1;
+    return randomNumber;
+  }
+
 
   function toggleLockOnDie(i) {
     setLocked([
@@ -66,20 +81,19 @@ export default function Game() {
     ]);
   }
 
-  function updateScore(scoreName, fn) {
-    setScores({...scores, [scoreName]: fn(dice)});
+
+  function updateScore(scoreName, scoreFunction) {
+    setScores({...scores, [scoreName]: scoreFunction(dice)});
     setLocked(locked.map(isLocked => false));
     setRollsLeft(STARTING_NUM_OF_ROLLS);
   }
 
-  useEffect(() => {
-      if (rollsLeft === STARTING_NUM_OF_ROLLS) {
-        rollDice();
-      }
-  }, [rollsLeft])
 
 
   function GameContainer() {
+    /* we display the items vertically; the two items we are displaying
+       are the title and the game itself, and we horizontally and vertically
+       center both the title and the game */
     const paperStyles = {
       display: "flex",
       flexDirection: "column",
@@ -88,74 +102,67 @@ export default function Game() {
     }
 
     return (
-      <Paper 
-        elevation={3}
-        sx={paperStyles}
-      >
+      <Paper elevation={15} sx={paperStyles}>
         <h2 className="Game-title">Yahtzee!</h2>
         <Box display="flex" flexDirection="row"> 
-          {Player()}
+          <Scoreboard scores={scores} updateScore={updateScore}/>
           {DiceContainer()}
         </Box>
       </Paper>
     );
   }
 
-  function Player() {
-    return (
-      <>
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-      <h3>PLAYER</h3>
-        <Scoreboard scores={scores} updateScore={updateScore}/>
-      </Box>
-      </>
-    )
-  }
-
   function DiceContainer() {
+    // styles must be in-line as MUI button doesn't support className
     const rollButtonStyle = {
       width: "12rem",
+      borderRadius: "0.5rem",
+      backgroundColor: "rgba(65, 90, 119, 1)",
+      ":hover": {
+        backgroundColor: "rgba(27, 38, 59, 1)",
+      },
+
       fontFamily: "Arial", 
       fontWeight: 300, 
       fontSize: "1.5rem", 
-      backgroundColor: "rgba(65, 90, 119, 1)",
-      ":hover": {
-        backgroundColor: `${!isRolling ? "#1B263B" : "#ddd"}`,
-      } ,
+      // capitalize first letter of every word
       textTransform: "capitalize",
-      borderRadius: "0.5rem",
-      "&.Mui-disabled": {
-        backgroundColor: "#ddd",
-        pointerEvents: "unset",
-        cursor: "not-allowed"
-      },
     };
 
-    let rollMessage;
-    if (rollsLeft === 1) {
-      rollMessage = "1 Roll Left"
-    } else if (rollsLeft === 2) {
-      rollMessage = `${rollsLeft} Rolls Left`
-    } else if (rollsLeft === 3) {
-      rollMessage = "Starting Turn!"
-    } else if (rollsLeft === 0) {
-      rollMessage = "0 Rolls Left"
-    }
     return (
-      <Box display="flex" flexDirection="column" alignItems="center">
-        <Dice dice={dice} isRolling={isRolling} locked={locked} toggleLockOnDie={rollsLeft > 0 ? toggleLockOnDie : undefined}/>
-        <Button className="Game-reroll" variant="contained" disabled={isRolling || rollsLeft === 0} sx={rollButtonStyle} onClick={isRolling || rollsLeft === 0 ? undefined : rollDice}>{rollMessage}</Button>
+      // we want the button under the dice, so we display them in a column and vertically center them
+      <Box display="flex" flexDirection="column" justifyContent="center">
+        <Dice 
+          dice={dice} 
+          isRolling={isRolling} 
+          locked={locked} 
+          // if the user has no rolls then they shouldn't be able to unlock the dice
+          toggleLockOnDie={rollsLeft > 0 ? toggleLockOnDie : undefined}
+        />
+        <Button 
+          sx={rollButtonStyle} 
+          variant="contained" 
+          disabled={isRolling || rollsLeft === 0} 
+          onClick={rollDice}
+        >
+          {RollMessage()}
+        </Button>
       </Box>
     );
   }
 
+  function RollMessage() {
+    switch (rollsLeft) {
+      case 0: return "0 Rolls Left";
+      case 1: return "1 Roll Left";
+      case 2: return "2 Rolls Left";
+      case 3: return "Starting Turn!";
+    }
+  }
+
 
   return (
-    <>
-      <Box display="flex" alignItems="center" justifyContent="center" height="100vh">
-        {GameContainer()}
-      </Box>
-    </>
+    GameContainer()
   );
 }
 

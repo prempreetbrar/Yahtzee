@@ -1,8 +1,13 @@
 .Game-title {
+    width: 100%;
+    margin-top: 0rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
     font-weight: 300;
     font-size: 5rem;
-    width: 100%;
     text-align: center;
+
     background-color: #4CB5AE;
     color: white;
 }
