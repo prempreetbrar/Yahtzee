@@ -5,6 +5,7 @@ import { IconContext } from 'react-icons/lib';
 import IconButton from '@mui/material/IconButton';
 import { shadows } from '@mui/system';
 import { Paper } from '@mui/material';
+import { keyframes } from '@mui/system';
 import "./Die.css";
 
 export default function Die({value, i, isRolling, locked, toggleLockOnDie}) {
@@ -38,8 +39,8 @@ export default function Die({value, i, isRolling, locked, toggleLockOnDie}) {
     disableElevation: false,
     opacity: locked ? 0.30 : 1,
     transition: "all 0.3s ease",
-    textShadow: "0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.1)",
     filter: "drop-shadow(0 0 1rem rgba(0, 0, 0, 0.20))",
+    cursor: !toggleLockOnDie || isRolling ? "not-allowed" : ""
   }
 
   const buttonIconStyle = {
@@ -48,7 +49,7 @@ export default function Die({value, i, isRolling, locked, toggleLockOnDie}) {
   }
 
   return (
-            <IconButton className={`${isRolling ? "Die-rolling" : ""}`}disableRipple elevation={100} sx={buttonStyle} onClick={handleToggle}>
+            <IconButton className={`${!locked && isRolling ? "Die-rolling" : ""}`} disableRipple elevation={100} sx={buttonStyle} onClick={isRolling ? undefined : handleToggle}>
         <IconContext.Provider value={buttonIconStyle}>
           {die}
         </IconContext.Provider>

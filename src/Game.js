@@ -1,6 +1,6 @@
 import "./Game.css"
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, Paper, Button } from "@mui/material";
 
 import Dice from "./Dice.js";
@@ -12,8 +12,10 @@ const SIDES_ON_DIE = 6;
 const STARTING_NUM_OF_ROLLS = 3;
 
 export default function Game() {
+  const isMounted = useRef(false);
   const [dice, setDice] = useState(Array(NUM_OF_DICE).fill(1));
   const [rollsLeft, setRollsLeft] = useState(STARTING_NUM_OF_ROLLS);
+  const [isRolling, setIsRolling] = useState(false);
   const [locked, setLocked] = useState(Array(NUM_OF_DICE).fill(false));
   const [scores, setScores] = useState({
     ones: null,
@@ -32,13 +34,28 @@ export default function Game() {
     yahtzee: null
   });
 
+  useEffect(() => {
+    if (rollsLeft === 0) {
+      setLocked(
+        locked.map(isLocked => true)
+      )
+    }
+  }, [rollsLeft])
+
   function rollDice(event) {
-    setDice(dice.map((die, i) => {
-      if (locked[i]) return die;
-      const randomNumber = Math.floor(Math.random() * SIDES_ON_DIE) + 1;
-      return randomNumber;
-    }));
-    setRollsLeft(rollsLeft - 1);
+    setIsRolling(true);
+    setTimeout(() => {
+      setDice(dice.map((die, i) => {
+        if (locked[i]) {
+          return die
+        };
+        const randomNumber = Math.floor(Math.random() * SIDES_ON_DIE) + 1;
+        return randomNumber;
+      }))
+      setRollsLeft(rollsLeft => rollsLeft - 1)
+      setIsRolling(false);
+    }
+    , 1000)
   }
 
   function toggleLockOnDie(i) {
@@ -51,8 +68,15 @@ export default function Game() {
 
   function updateScore(scoreName, fn) {
     setScores({...scores, [scoreName]: fn(dice)});
+    setLocked(locked.map(isLocked => false));
     setRollsLeft(STARTING_NUM_OF_ROLLS);
   }
+
+  useEffect(() => {
+      if (rollsLeft === STARTING_NUM_OF_ROLLS) {
+        rollDice();
+      }
+  }, [rollsLeft])
 
 
   function GameContainer() {
@@ -60,7 +84,7 @@ export default function Game() {
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
     }
 
     return (
@@ -90,21 +114,37 @@ export default function Game() {
 
   function DiceContainer() {
     const rollButtonStyle = {
-      fontFamily: "Roboto", 
+      width: "12rem",
+      fontFamily: "Arial", 
       fontWeight: 300, 
       fontSize: "1.5rem", 
-      backgroundColor: "#415A77",
+      backgroundColor: "rgba(65, 90, 119, 1)",
       ":hover": {
-        backgroundColor: "#1B263B"
+        backgroundColor: `${!isRolling ? "#1B263B" : "#ddd"}`,
       } ,
       textTransform: "capitalize",
-      borderRadius: "0.5rem"
+      borderRadius: "0.5rem",
+      "&.Mui-disabled": {
+        backgroundColor: "#ddd",
+        pointerEvents: "unset",
+        cursor: "not-allowed"
+      },
     };
 
+    let rollMessage;
+    if (rollsLeft === 1) {
+      rollMessage = "1 Roll Left"
+    } else if (rollsLeft === 2) {
+      rollMessage = `${rollsLeft} Rolls Left`
+    } else if (rollsLeft === 3) {
+      rollMessage = "Starting Turn!"
+    } else if (rollsLeft === 0) {
+      rollMessage = "0 Rolls Left"
+    }
     return (
       <Box display="flex" flexDirection="column" alignItems="center">
-        <Dice dice={dice} locked={locked} toggleLockOnDie={toggleLockOnDie}/>
-        <Button variant="contained" sx={rollButtonStyle} disabled={rollsLeft === 0} onClick={rollDice}>Roll</Button>
+        <Dice dice={dice} isRolling={isRolling} locked={locked} toggleLockOnDie={rollsLeft > 0 ? toggleLockOnDie : undefined}/>
+        <Button className="Game-reroll" variant="contained" disabled={isRolling || rollsLeft === 0} sx={rollButtonStyle} onClick={isRolling || rollsLeft === 0 ? undefined : rollDice}>{rollMessage}</Button>
       </Box>
     );
   }

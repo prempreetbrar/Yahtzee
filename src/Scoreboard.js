@@ -7,12 +7,25 @@ export default function Scoreboard({scores, updateScore}) {
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
       <h2 style={{fontWeight: 300}}>Upper</h2>
       {
-        Object.entries(scores).map(([key, value]) => 
-          <Box className={`ScoreRow ${value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`} display="flex" flexDirection="row" borderBottom="black solid 0.75px" onClick={value ? undefined : () => updateScore(key, getFunctionBasedOnName(key))}>
-            <Box width="10rem" fontWeight={300} textAlign="left"
+        Object.entries(scores).slice(0, 6).map(([key, value]) => 
+          <Box minWidth="20rem" justifyContent="space-between" className={`ScoreRow ${value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`} display="flex" flexDirection="row" borderBottom="black solid 0.75px" onClick={value ? undefined : () => updateScore(key, getFunctionBasedOnName(key))}>
+            <Box fontWeight={300} textAlign="left"
               sx={{textDecoration: `${value !== null ? "line-through" : ""}`}}
             >{key.charAt(0).toUpperCase() + key.replace(/([A-Z])/g, " $1").slice(1)}</Box>
-            <Box sx={{flexGrow: 1, 
+            <Box sx={{ 
+              }}>{value !== null ? value : "1 point per 1"}</Box>
+          </Box>
+        )
+      }
+
+    <h2 style={{fontWeight: 300}}>Lower</h2>
+      {
+        Object.entries(scores).slice(6).map(([key, value]) => 
+          <Box minWidth="20rem" justifyContent="space-between" className={`ScoreRow ${value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`} display="flex" flexDirection="row" borderBottom="black solid 0.75px" onClick={value ? undefined : () => updateScore(key, getFunctionBasedOnName(key))}>
+            <Box fontWeight={300} textAlign="left"
+              sx={{textDecoration: `${value !== null ? "line-through" : ""}`}}
+            >{key.charAt(0).toUpperCase() + key.replace(/([A-Z])/g, " $1").slice(1)}</Box>
+            <Box sx={{ 
               }}>{value !== null ? value : "1 point per 1"}</Box>
           </Box>
         )
