@@ -1,36 +1,72 @@
-import { Box } from "@mui/system"
-import {scoreUpperSection, threeOfAKind, fourOfAKind, fullHouse, smallStraight, largeStraight, chance, yahtzee} from "./ScoreCalculator";
+import { Box } from "@mui/system";
+import { Tooltip } from "@mui/material";
+import { 
+  scoreUpperSection, 
+  threeOfAKind, 
+  fourOfAKind, 
+  fullHouse, 
+  smallStraight, 
+  largeStraight, 
+  chance, 
+  yahtzee
+} from "./ScoreCalculator";
+
 import "./Scoreboard.css";
 
-export default function Scoreboard({scores, updateScore}) {
-  return (
-    <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-      <h2 style={{fontWeight: 300}}>Upper</h2>
-      {
-        Object.entries(scores).slice(0, 6).map(([key, value]) => 
-          <Box minWidth="20rem" justifyContent="space-between" className={`ScoreRow ${value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`} display="flex" flexDirection="row" borderBottom="black solid 0.75px" onClick={value ? undefined : () => updateScore(key, getFunctionBasedOnName(key))}>
-            <Box fontWeight={300} textAlign="left"
-              sx={{textDecoration: `${value !== null ? "line-through" : ""}`}}
-            >{key.charAt(0).toUpperCase() + key.replace(/([A-Z])/g, " $1").slice(1)}</Box>
-            <Box sx={{ 
-              }}>{value !== null ? value : "1 point per 1"}</Box>
-          </Box>
-        )
-      }
 
-    <h2 style={{fontWeight: 300}}>Lower</h2>
-      {
-        Object.entries(scores).slice(6).map(([key, value]) => 
-          <Box minWidth="20rem" justifyContent="space-between" className={`ScoreRow ${value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`} display="flex" flexDirection="row" borderBottom="black solid 0.75px" onClick={value ? undefined : () => updateScore(key, getFunctionBasedOnName(key))}>
-            <Box fontWeight={300} textAlign="left"
-              sx={{textDecoration: `${value !== null ? "line-through" : ""}`}}
-            >{key.charAt(0).toUpperCase() + key.replace(/([A-Z])/g, " $1").slice(1)}</Box>
-            <Box sx={{ 
-              }}>{value !== null ? value : "1 point per 1"}</Box>
-          </Box>
-        )
-      }
+
+export default function Scoreboard({dice, scores, updateScore}) {
+  return (
+    <Box display="flex" flexDirection="column" alignItems="center" marginBottom="1rem">
+      {ScoreboardSection(dice, scores, updateScore, "Upper", 0, 6)}
+      {ScoreboardSection(dice, scores, updateScore, "Lower", 6, 13)}
+      <h2 className="ScoreSection-title" style={{width:"90%", textAlign: "center"}}>TOTAL SCORE: {Object.values(scores).reduce((sum, scoreValue) => sum + scoreValue)}</h2>
     </Box>
+  )
+}
+
+function ScoreRow(dice, updateScore, scoreName, value) {
+  const scoreRowStyle = {
+    display:"flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+
+    minWidth: "22.5rem",
+    borderBottom: "black solid 0.75px"
+  };
+  const scoreRowClass = `ScoreRow ${value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`;
+  const onScoreRowClick = value !== null ? undefined : handleUpdateScore;
+
+  const scoreRowTextStyle = {
+    fontWeight: 300,
+    textDecoration: `${value !== null ? "line-through" : ""}`,
+  }
+  const scoreRowScoreStyle = { fontWeight: `${value !== null ? 500 : 300 }`, color: `${value !== null ? "black" : "#5C7AFF" }`};
+  const scoreRowName = scoreName.charAt(0).toUpperCase() + scoreName.replace(/([A-Z])/g, " $1").slice(1);
+  const scoreRowTooltipStyle = {
+    tooltip: {
+      sx: {
+        backgroundColor: "common.black",
+        "& .MuiTooltip-arrow": {
+          color: "common.black",
+        },
+      },
+    },
+  } 
+
+  function handleUpdateScore() {
+    updateScore(scoreName, getFunctionBasedOnName(scoreName));
+  }
+
+  const thing = getFunctionBasedOnName(scoreName)
+
+  return (
+    <Tooltip componentsProps={scoreRowTooltipStyle} title={getMessageBasedOnName(scoreName)} placement="right" arrow>
+      <Box className={scoreRowClass} sx={scoreRowStyle} onClick={onScoreRowClick}>
+        <Box sx={scoreRowTextStyle}>{scoreRowName}</Box>
+        <Box sx={scoreRowScoreStyle}>{value !== null ? value : thing(dice)}</Box>
+      </Box>
+    </Tooltip>
   )
 }
 
@@ -50,4 +86,33 @@ function getFunctionBasedOnName(name) {
     case "chance": return chance;
     case "yahtzee": return yahtzee;
   }
+}
+
+function getMessageBasedOnName(name) {
+  switch(name) {
+    case "ones": return "1 point per 1"
+    case "twos": return "2 points per 2"
+    case "threes": return "3 points per 3"
+    case "fours": return "4 points per 4"
+    case "fives": return "5 points per 5"
+    case "sixes": return "6 points per 6"
+    case "threeOfAKind": return "Sum all dice if 3 are the same"
+    case "fourOfAKind": return "Sum all dice if 4 are the same"
+    case "fullHouse": return "25 points for three of a kind and pair"
+    case "smallStraight": return "30 points for four dice in a sequence"
+    case "largeStraight": return "40 points for five dice in a sequence";
+    case "chance": return "Sum of all dice";
+    case "yahtzee": return "50 points if all 5 dice are the same";
+  }
+}
+
+function ScoreboardSection(dice, scores, updateScore, sectionName, fromRow, toRow) {
+  return (
+    <>
+      <h2 className="ScoreSection-title">{sectionName}</h2>
+      {Object.entries(scores).slice(fromRow, toRow).map(([scoreName, value]) => 
+        ScoreRow(dice, updateScore, scoreName, value))
+      }
+    </>
+  )
 }

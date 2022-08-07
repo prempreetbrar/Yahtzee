@@ -2,6 +2,7 @@ import "./Game.css"
 
 import { useEffect, useState } from 'react';
 import { Box, Paper, Button } from "@mui/material";
+import { VscDebugRestart } from 'react-icons/vsc';
 
 import Dice from "./Dice.js";
 import Scoreboard from './Scoreboard.js';
@@ -42,10 +43,7 @@ export default function Game() {
     if (rollsLeft === 0) {
       setLocked(locked.map(isLocked => true));
     }
-  }, [rollsLeft]);
 
-  useEffect(() => {
-    // we need to use one of the rolls on a new turn to give the user new dice
     if (rollsLeft === STARTING_NUM_OF_ROLLS) {
       rollDice();
     }
@@ -88,7 +86,29 @@ export default function Game() {
     setRollsLeft(STARTING_NUM_OF_ROLLS);
   }
 
-
+  function restartGame() {
+    setDice(Array(NUM_OF_DICE).fill(1));
+    setLocked(Array(NUM_OF_DICE).fill(false));
+  
+    setRollsLeft(STARTING_NUM_OF_ROLLS);
+    setIsRolling(false);
+    setScores({
+      ones: null,
+      twos: null,
+      threes: null,
+      fours: null,
+      fives: null,
+      sixes: null, 
+  
+      threeOfAKind: null,
+      fourOfAKind: null,
+      fullHouse: null,
+      smallStraight: null,
+      largeStraight: null,
+      chance: null,
+      yahtzee: null
+    });
+  }
 
   function GameContainer() {
     /* we display the items vertically; the two items we are displaying
@@ -99,14 +119,17 @@ export default function Game() {
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
+
+      overflow: "scroll",
+      width: "25rem"
     }
 
     return (
       <Paper elevation={15} sx={paperStyles}>
         <h2 className="Game-title">Yahtzee!</h2>
-        <Box display="flex" flexDirection="row"> 
-          <Scoreboard scores={scores} updateScore={updateScore}/>
+        <Box display="flex" flexDirection="column" width="100%"> 
           {DiceContainer()}
+          <Scoreboard dice={dice} scores={scores} updateScore={updateScore}/>
         </Box>
       </Paper>
     );
@@ -116,6 +139,9 @@ export default function Game() {
     // styles must be in-line as MUI button doesn't support className
     const rollButtonStyle = {
       width: "12rem",
+      marginTop: "1.5rem",
+      marginBottom: "2rem",
+
       borderRadius: "0.5rem",
       backgroundColor: "rgba(65, 90, 119, 1)",
       ":hover": {
@@ -131,7 +157,7 @@ export default function Game() {
 
     return (
       // we want the button under the dice, so we display them in a column and vertically center them
-      <Box display="flex" flexDirection="column" justifyContent="center">
+      <Box display="flex" flexDirection="column" alignItems="center" backgroundColor="#4CB5AE">
         <Dice 
           dice={dice} 
           isRolling={isRolling} 
@@ -161,9 +187,7 @@ export default function Game() {
   }
 
 
-  return (
-    GameContainer()
-  );
+  return GameContainer();
 }
 
 

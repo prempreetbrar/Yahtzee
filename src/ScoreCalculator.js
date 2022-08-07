@@ -45,7 +45,7 @@ function largeStraight(dice) {
 }
 
 function yahtzee(dice) {
-  if ((new Set(dice)).length === 1) return 50;
+  if ((new Set(dice)).size === 1) return 50;
   return 0;
 }
 

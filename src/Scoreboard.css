@@ -1,14 +1,18 @@
-import ::-webkit-validation-bubble-text-bl
 
 .ScoreRow {
     transition: all 0.2s;
-  }
-  .ScoreRow-active:hover {
+}
+
+.ScoreSection-title {
+    font-weight: 300;
+}
+
+.ScoreRow-active:hover {
     cursor: pointer;
     background: rgba(227, 242, 253, 0.75);
-  }
+}
 
-  .ScoreRow-disabled {
+.ScoreRow-disabled {
     background: linear-gradient(
       to right,
       rgba(210, 236, 234, 1) 0%,
@@ -18,17 +22,17 @@ import ::-webkit-validation-bubble-text-bl
     );
     background-size: 300% 300%;
     animation: Slide 1s ease 1;
-  }
+}
 
-  @keyframes Slide {
+@keyframes Slide {
     0% {
       background-position: 100% 50%;
     }
     100% {
       background-position: 0% 51%;
     }
-  }
+}
   
-  .ScoreRow-disabled:hover {
+.ScoreRow-disabled:hover {
     cursor: not-allowed;
-  }
+}
