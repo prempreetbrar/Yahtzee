@@ -2,12 +2,9 @@ import "./Game.css"
 
 import { useEffect, useState } from 'react';
 import { Box, Paper, Button } from "@mui/material";
-import { VscDebugRestart } from 'react-icons/vsc';
 
 import Dice from "./Dice.js";
 import Scoreboard from './Scoreboard.js';
-import { IconButton } from "@mui/material";
-import { IconContext } from "react-icons";
 
 const NUM_OF_DICE = 5;
 const SIDES_ON_DIE = 6;
@@ -41,19 +38,20 @@ export default function Game() {
 
 
   useEffect(() => {
-    // if there's no rolls left, we don't want to give the illusion that the dice
-    // can still be unlocked and the values can change
+    /* if there's no rolls left, we don't want to give the illusion that the dice
+       can still be unlocked and the values can change */
     if (rollsLeft === 0) {
       setLocked(locked.map(isLocked => true));
     }
 
+    // we automatically roll for the user on their first roll (as a quality of life feature) 
     if (rollsLeft === STARTING_NUM_OF_ROLLS) {
       rollDice();
     }
   }, [rollsLeft]);
 
   useEffect(() => {
-    /* on every "first" render, highScore is set to null. However,
+    /* on every "first" render, highScore is set to 0. However,
        we don't want to put this in storage and override our stored tasks */
     if (highScore) {
       localStorage.setItem("highScore", JSON.stringify(highScore));
@@ -61,12 +59,11 @@ export default function Game() {
   }, [highScore]);
 
   useEffect(() => {
+    /* if the user cleared their cookies or it's their first time rendering the app,
+       then the high score is set to 0 */
     const highScoreFromStorage = JSON.parse(localStorage.getItem("highScore")) || 0;
-    /* we are fine with highScore being null since we initialize it to null anyway;
-       no conditional check is needed (albeit this only applies if user clears cookies
-       or is rendering app for first time) */
     setHighScore(highScoreFromStorage);
-  }, [])
+  }, []);
 
 
   useEffect(() => {
@@ -79,14 +76,13 @@ export default function Game() {
   function rollDice(event) {
     setIsRolling(true);
 
-    // we wait the length of the spin animation to make the dice
-    // look like they are spinning before we roll
+    /* we wait the length of the spin animation to make the dice
+       look like they are spinning before we "roll" and change the value */
     setTimeout(() => {
       setDice(dice.map((dieValue, i) => rollDie(dieValue, i)));
       setRollsLeft(rollsLeft => rollsLeft - 1);
       setIsRolling(false);
-    }
-    , MILLISECONDS_PER_ROLL);
+    }, MILLISECONDS_PER_ROLL);
   }
 
   function rollDie(dieValue, i) {
@@ -149,36 +145,12 @@ export default function Game() {
       width: "25rem"
     }
 
-    const buttonStyle = {
-      disableElevation: false,
-      opacity: isRolling ? 0.30 : 1,
-      transition: "all 0.3s ease",
-      filter: "drop-shadow(0 0 1rem rgba(0, 0, 0, 0.20))",
-      cursor: !toggleLockOnDie || isRolling ? "not-allowed" : ""
-    }
-  
-    const buttonIconStyle = {
-      color: "#3F292B",
-      size: 60,
-    }
-
     return (
       <Paper elevation={15} sx={paperStyles}>
         <h2 className="Game-title">Yahtzee!</h2>
         <Box display="flex" flexDirection="column" width="100%"> 
           {DiceContainer()}
-          <Scoreboard isRolling={isRolling} dice={dice} highScore={highScore} scores={scores} updateScore={updateScore}/>
-
-
-          <IconButton className={`${isRolling ? "Game-restart" : ""}`} disableRipple elevation={100} sx={buttonStyle} onClick={isRolling ? undefined : restartGame}>
-            <IconContext.Provider value={buttonIconStyle}>
-
-            <VscDebugRestart/>
-            </IconContext.Provider>
-          </IconButton>
-
-
-
+          <Scoreboard restartGame={restartGame} isRolling={isRolling} dice={dice} highScore={highScore} scores={scores} updateScore={updateScore}/>
 
         </Box>
       </Paper>

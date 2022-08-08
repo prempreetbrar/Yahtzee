@@ -13,18 +13,59 @@ import {
 
 import "./Scoreboard.css";
 
+import { IconButton } from "@mui/material";
+import { IconContext } from "react-icons";
+import { VscDebugRestart } from 'react-icons/vsc';
 
-
-export default function Scoreboard({isRolling, dice, highScore, scores, updateScore}) {
+export default function Scoreboard({restartGame, isRolling, dice, highScore, scores, updateScore}) {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" marginBottom="1rem">
       {ScoreboardSection(isRolling, dice, scores, updateScore, "Upper", 0, 6)}
       {ScoreboardSection(isRolling, dice, scores, updateScore, "Lower", 6, 13)}
-      <h2 className="ScoreSection-title" style={{width:"90%", textAlign: "center"}}>TOTAL SCORE: {Object.values(scores).reduce((sum, scoreValue) => sum + scoreValue)}</h2>
+        <Box display="flex" justifyContent="space-evenly" width="90%" flexDirection="row" borderBottom="2px solid rgba(76, 181, 174, 1)">
+          <h2 className="ScoreSection-title" style={{borderBottom:"0px solid rgba(76, 181, 174, 1)", margin: "2rem 0 0 0", height:"fit-content", textAlign: "center"}}>TOTAL SCORE: {Object.values(scores).reduce((sum, scoreValue) => sum + scoreValue)}        </h2>
+          {RestartButton()}  
+        </Box>
       <h2 className="ScoreSection-title" style={{width:"90%", textAlign: "center"}}>HIGH SCORE: {highScore}</h2>
     </Box>
   )
+
+  function RestartButton() {
+    // MUI buttons cannot be styled using classes
+    const buttonStyle = {
+      disableElevation: false,
+      opacity: isRolling ? 0.30 : 1,
+      transition: "all 0.3s ease",
+      filter: "drop-shadow(0 0 1rem rgba(0, 0, 0, 0.20))",
+      cursor: isRolling ? "not-allowed" : "",
+      height: "fit-content",
+      margin: "2.175rem 0 0 0",
+      padding: 0
+    };
+  
+    const buttonIconStyle = {
+      color: "rgba(63, 41, 43, 1)",
+      size: 30,
+    };
+  
+    return (
+      <IconButton 
+        className={`${isRolling ? "Game-restart" : ""}`} 
+        disableRipple 
+        elevation={100} 
+        sx={buttonStyle} 
+        // when we are rolling we shouldn't be able to restart the game
+        onClick={isRolling ? undefined : restartGame}
+      >
+        <IconContext.Provider value={buttonIconStyle}>
+          <VscDebugRestart/>
+        </IconContext.Provider>
+      </IconButton>
+    );
+  }
 }
+
+
 
 function ScoreRow({isRolling, dice, updateScore, scoreName, value}) {
   const scoreRowStyle = {
