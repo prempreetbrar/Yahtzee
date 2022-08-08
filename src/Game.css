@@ -12,3 +12,16 @@
     background-color: #4CB5AE;
     color: white;
 }
+
+.Game-restart {
+    animation: restart 1s ease-out;
+}
+
+@keyframes restart {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(-360deg);
+    }
+  }

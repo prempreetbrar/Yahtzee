@@ -15,17 +15,18 @@ import "./Scoreboard.css";
 
 
 
-export default function Scoreboard({dice, scores, updateScore}) {
+export default function Scoreboard({isRolling, dice, highScore, scores, updateScore}) {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" marginBottom="1rem">
-      {ScoreboardSection(dice, scores, updateScore, "Upper", 0, 6)}
-      {ScoreboardSection(dice, scores, updateScore, "Lower", 6, 13)}
+      {ScoreboardSection(isRolling, dice, scores, updateScore, "Upper", 0, 6)}
+      {ScoreboardSection(isRolling, dice, scores, updateScore, "Lower", 6, 13)}
       <h2 className="ScoreSection-title" style={{width:"90%", textAlign: "center"}}>TOTAL SCORE: {Object.values(scores).reduce((sum, scoreValue) => sum + scoreValue)}</h2>
+      <h2 className="ScoreSection-title" style={{width:"90%", textAlign: "center"}}>HIGH SCORE: {highScore}</h2>
     </Box>
   )
 }
 
-function ScoreRow(dice, updateScore, scoreName, value) {
+function ScoreRow({isRolling, dice, updateScore, scoreName, value}) {
   const scoreRowStyle = {
     display:"flex",
     flexDirection: "row",
@@ -34,7 +35,7 @@ function ScoreRow(dice, updateScore, scoreName, value) {
     minWidth: "22.5rem",
     borderBottom: "black solid 0.75px"
   };
-  const scoreRowClass = `ScoreRow ${value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`;
+  const scoreRowClass = `ScoreRow ${isRolling || value !== null ? "ScoreRow-disabled" : "ScoreRow-active"}`;
   const onScoreRowClick = value !== null ? undefined : handleUpdateScore;
 
   const scoreRowTextStyle = {
@@ -42,6 +43,7 @@ function ScoreRow(dice, updateScore, scoreName, value) {
     textDecoration: `${value !== null ? "line-through" : ""}`,
   }
   const scoreRowScoreStyle = { fontWeight: `${value !== null ? 500 : 300 }`, color: `${value !== null ? "black" : "#5C7AFF" }`};
+  console.log(scoreName);
   const scoreRowName = scoreName.charAt(0).toUpperCase() + scoreName.replace(/([A-Z])/g, " $1").slice(1);
   const scoreRowTooltipStyle = {
     tooltip: {
@@ -62,7 +64,7 @@ function ScoreRow(dice, updateScore, scoreName, value) {
 
   return (
     <Tooltip componentsProps={scoreRowTooltipStyle} title={getMessageBasedOnName(scoreName)} placement="right" arrow>
-      <Box className={scoreRowClass} sx={scoreRowStyle} onClick={onScoreRowClick}>
+      <Box className={scoreRowClass} sx={scoreRowStyle} onClick={!isRolling ? onScoreRowClick : undefined}>
         <Box sx={scoreRowTextStyle}>{scoreRowName}</Box>
         <Box sx={scoreRowScoreStyle}>{value !== null ? value : thing(dice)}</Box>
       </Box>
@@ -106,13 +108,13 @@ function getMessageBasedOnName(name) {
   }
 }
 
-function ScoreboardSection(dice, scores, updateScore, sectionName, fromRow, toRow) {
+function ScoreboardSection(isRolling, dice, scores, updateScore, sectionName, fromRow, toRow) {
   return (
     <>
       <h2 className="ScoreSection-title">{sectionName}</h2>
       {Object.entries(scores).slice(fromRow, toRow).map(([scoreName, value]) => 
-        ScoreRow(dice, updateScore, scoreName, value))
-      }
+        <ScoreRow isRolling={isRolling} dice={dice} updateScore={updateScore} scoreName={scoreName} value={value}/>
+      )}
     </>
   )
 }
