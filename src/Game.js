@@ -143,15 +143,21 @@ export default function Game() {
 
       overflow: "scroll",
       width: "25rem"
-    }
+    };
 
     return (
-      <Paper elevation={15} sx={paperStyles}>
+      <Paper elevation={24} sx={paperStyles}>
         <h2 className="Game-title">Yahtzee!</h2>
         <Box display="flex" flexDirection="column" width="100%"> 
           {DiceContainer()}
-          <Scoreboard restartGame={restartGame} isRolling={isRolling} dice={dice} highScore={highScore} scores={scores} updateScore={updateScore}/>
-
+          <Scoreboard 
+            restartGame={restartGame} 
+            isRolling={isRolling} 
+            dice={dice} 
+            highScore={highScore} 
+            scores={scores} 
+            updateScore={updateScore}
+          />
         </Box>
       </Paper>
     );
@@ -179,7 +185,12 @@ export default function Game() {
 
     return (
       // we want the button under the dice, so we display them in a column and vertically center them
-      <Box display="flex" flexDirection="column" alignItems="center" backgroundColor="#4CB5AE">
+      <Box 
+        display="flex" 
+        flexDirection="column" 
+        alignItems="center" 
+        backgroundColor="rgba(76, 181, 174, 1)"
+      >
         <Dice 
           dice={dice} 
           isRolling={isRolling} 
