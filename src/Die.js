@@ -15,10 +15,13 @@ export default function Die({isRolling, isLocked, value, i, toggleLockOnDie}) {
   // MUI button doesn't have className
   const iconButtonStyle = {
     disableElevation: false,
+    backgroundColor: "rgba(76, 181, 174, 1)",
+    "&.MuiButtonBase-root:hover": {
+      backgroundColor: "rgba(76, 181, 174, 1)"
+    },
     opacity: isLocked ? 0.30 : 1,
 
     transition: "all 0.3s ease",
-    filter: "drop-shadow(0 0 1rem rgba(0, 0, 0, 0.20))",
     // if the die can't be toggled or is being rolled, then user can't lock it
     cursor: !toggleLockOnDie || isRolling ? "not-allowed" : ""
   }
@@ -42,7 +45,6 @@ export default function Die({isRolling, isLocked, value, i, toggleLockOnDie}) {
     <IconButton 
       className={iconButtonClass} 
       disableRipple 
-      elevation={100} 
       sx={iconButtonStyle} 
       // while rolling, the user shouldn't be able to lock/unlock the die
       onClick={isRolling ? undefined : handleToggle}
