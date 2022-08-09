@@ -20,6 +20,7 @@ try it out!** Or, watch a quick gif of me playing it below:
 - I used primitive HTML elements where I could, and only used Material UI (MUI) where it made sense. Certain MUI
   styles are specified in-line rather than on the stylesheet; this is only in the places where it was an MUI requirement.
 - I was originally going to make the game multiplayer, but then would have had to come up with a good AI. This would have sidetracked me from my original goal, which was to practice React.
+- The dice rolling uses CSS animations; at the time I am writing this, I've ensured the animation works in every browser. However, if a browser changes its implementations, the animation may not work exactly as seen in the GIF.
 
 &nbsp;
 
