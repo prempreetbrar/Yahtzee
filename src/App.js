@@ -1,6 +1,6 @@
 import { Box } from "@mui/system";
 
-import Game from "./Game"
+import Game from "./Game";
 
 
 

@@ -1,68 +1,68 @@
-import { breadcrumbsClasses } from '@mui/material';
-import { FaDiceOne, FaDiceTwo, FaDiceThree, FaDiceFour, FaDiceFive, FaDiceSix } from 'react-icons/fa';
-import { BsDiceOne, BsDiceTwo, BsDiceThree, BsDiceFour, BsDiceFive, BsDiceSix } from 'react-icons/fa';
-import { IconContext } from 'react-icons/lib';
-import IconButton from '@mui/material/IconButton';
-import { shadows } from '@mui/system';
-import { Paper, Box } from '@mui/material';
-import { keyframes } from '@mui/system';
 import "./Die.css";
-import { withTheme } from '@emotion/react';
 
-export default function Die({value, i, isRolling, locked, toggleLockOnDie}) {
+import { FaDiceOne, FaDiceTwo, FaDiceThree, FaDiceFour, FaDiceFive, FaDiceSix } from 'react-icons/fa';
+import { IconContext } from 'react-icons/lib';
+import { Box, IconButton } from '@mui/material';
+
+
+
+export default function Die({isRolling, isLocked, value, i, toggleLockOnDie}) {
   function handleToggle(event) {
     toggleLockOnDie(i);
   }
 
-  let die;
-  switch(value) {
-    case 1: 
-      die = <FaDiceOne/>;
-      break;
-    case 2: 
-      die = <FaDiceTwo/>;
-      break;
-    case 3: 
-      die = <FaDiceThree />;
-      break;
-    case 4: 
-      die = <FaDiceFour />;
-      break;
-    case 5: 
-      die = <FaDiceFive />;
-      break;
-    case 6:
-      die = <FaDiceSix />;
-      break;
-  }
-
-  const buttonStyle = {
+  const iconButtonClass = !isLocked && isRolling ? "Die-rolling" : "";
+  // MUI button doesn't have className
+  const iconButtonStyle = {
     disableElevation: false,
-    opacity: locked ? 0.30 : 1,
+    opacity: isLocked ? 0.30 : 1,
+
     transition: "all 0.3s ease",
     filter: "drop-shadow(0 0 1rem rgba(0, 0, 0, 0.20))",
+    // if the die can't be toggled or is being rolled, then user can't lock it
     cursor: !toggleLockOnDie || isRolling ? "not-allowed" : ""
   }
 
-  const buttonIconStyle = {
-    color: "#FF101F",
+  const dieStyle = {
+    color: "rgba(255, 16, 31, 1)",
     size: 60,
   }
 
+  /* the icons are transparent, so the dots in the dice looked green; to counteract this, 
+     we wrap the die in a box whose background is white, and then we change the width and
+     height of the background and center it so that it "fills" in the dots */
   const boxStyle = {
+    display: "inline-flex",
     background:  "linear-gradient(to bottom, white 0%, white 100%) no-repeat",
     backgroundSize: "calc(100% - 20px) calc(100% - 20px)",
     backgroundPosition: "center"
   }
 
   return (
-        <IconButton className={`${!locked && isRolling ? "Die-rolling" : ""}`} disableRipple elevation={100} sx={buttonStyle} onClick={isRolling ? undefined : handleToggle}>
-        <IconContext.Provider value={buttonIconStyle}>
-        <Box sx={boxStyle} display="inline-flex">
-
-          {die}
-          </Box>
-        </IconContext.Provider>
-      </IconButton>
+    <IconButton 
+      className={iconButtonClass} 
+      disableRipple 
+      elevation={100} 
+      sx={iconButtonStyle} 
+      // while rolling, the user shouldn't be able to lock/unlock the die
+      onClick={isRolling ? undefined : handleToggle}
+    >
+      <IconContext.Provider value={dieStyle}>
+        <Box sx={boxStyle}>{getDieIcon(value)}</Box>
+      </IconContext.Provider>
+    </IconButton>
   );
+}
+
+
+
+function getDieIcon(value) {
+  switch(value) {
+    case 1: return <FaDiceOne/>;
+    case 2: return <FaDiceTwo/>;
+    case 3: return <FaDiceThree />;
+    case 4: return <FaDiceFour />;
+    case 5: return <FaDiceFive />;
+    case 6: return <FaDiceSix />;
+  }
 }

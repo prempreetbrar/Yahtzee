@@ -1,4 +1,4 @@
-import "./Game.css"
+import "./Game.css";
 
 import { useEffect, useState } from 'react';
 import { Box, Paper, Button } from "@mui/material";

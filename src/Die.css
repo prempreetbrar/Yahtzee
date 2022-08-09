@@ -1,25 +1,12 @@
-.Die {
-    transition: all 0.3s ease;
+.Die-rolling {
+  animation: spin 1s ease-out;
 }
 
 @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+  0% {
+    transform: rotate(0deg);
   }
-
-  .Die-rolling {
-    animation: spin 1s ease-out;
+  100% {
+    transform: rotate(360deg);
   }
-
-.Die:not(.Die-locked):hover {
-    opacity: 0.8;
-  }
-
-.Die-rolling:hover,
-.Die[disabled] {
-  cursor: not-allowed;
 }
