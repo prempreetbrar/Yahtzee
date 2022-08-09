@@ -1,6 +1,23 @@
 
 .ScoreRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    min-width: 22.5rem;
     transition: all 0.2s;
+    border-bottom: black solid 0.75px;
+}
+
+.Scoreboard-TotalScore {
+  border-bottom: 0px solid rgba(76, 181, 174, 1);
+  margin: 2rem 0 0 0;
+  height: fit-content;
+}
+
+.Scoreboard-HighScore {
+  width: 90%;
+  text-align: center;
 }
 
 .ScoreSection-title {
@@ -10,6 +27,10 @@
 .ScoreRow-active:hover {
     cursor: pointer;
     background: rgba(227, 242, 253, 0.75);
+}
+
+.ScoreRow-off:hover {
+  cursor: not-allowed;
 }
 
 .ScoreRow-disabled {
@@ -33,6 +54,19 @@
     }
 }
   
+.Scoreboard-restart {
+  animation: restart 1s ease-out;
+}
+
+@keyframes restart {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(-360deg);
+  }
+}
+
 .ScoreRow-disabled:hover {
     cursor: not-allowed;
 }

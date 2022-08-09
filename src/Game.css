@@ -12,16 +12,3 @@
     background-color: rgba(76, 181, 174, 1);
     color: white;
 }
-
-.Game-restart {
-    animation: restart 1s ease-out;
-}
-
-@keyframes restart {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(-360deg);
-    }
-}

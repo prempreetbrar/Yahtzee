@@ -10,9 +10,10 @@ const NUM_OF_DICE = 5;
 const SIDES_ON_DIE = 6;
 const STARTING_NUM_OF_ROLLS = 3;
 const MILLISECONDS_PER_ROLL = 1000;
-
+const MILLISECONDS_TO_RESTART = 1000;
 
 export default function Game() {
+  const [isRestarting, setIsRestarting] = useState(false);
   const [dice, setDice] = useState(Array(NUM_OF_DICE).fill(1));
   const [locked, setLocked] = useState(Array(NUM_OF_DICE).fill(false));
 
@@ -109,26 +110,34 @@ export default function Game() {
   }
 
   function restartGame(event) {
+    setIsRestarting(true);
+    /* we want to change the number of rolls before the timeout delay,
+       since this will invoke rollDice which already has a 1000 ms delay anyway
+       (if we did this inside setTimeout then it would be a 2000 ms delay, 1000 ms
+        from the setTimeout below and another 1000 ms from the rollDice() method) */
     setLocked(Array(NUM_OF_DICE).fill(false));
-  
     setRollsLeft(STARTING_NUM_OF_ROLLS);
-    setIsRolling(false);
-    setScores({
-      ones: null,
-      twos: null,
-      threes: null,
-      fours: null,
-      fives: null,
-      sixes: null, 
-  
-      threeOfAKind: null,
-      fourOfAKind: null,
-      fullHouse: null,
-      smallStraight: null,
-      largeStraight: null,
-      chance: null,
-      yahtzee: null
-    });
+
+    setTimeout(() => {
+      setIsRolling(false);
+      setScores({
+        ones: null,
+        twos: null,
+        threes: null,
+        fours: null,
+        fives: null,
+        sixes: null, 
+    
+        threeOfAKind: null,
+        fourOfAKind: null,
+        fullHouse: null,
+        smallStraight: null,
+        largeStraight: null,
+        chance: null,
+        yahtzee: null
+      });
+      setIsRestarting(false);
+    }, MILLISECONDS_TO_RESTART);
   }
 
   function GameContainer() {
@@ -151,6 +160,7 @@ export default function Game() {
         <Box display="flex" flexDirection="column" width="100%"> 
           {DiceContainer()}
           <Scoreboard 
+            isRestarting={isRestarting}
             restartGame={restartGame} 
             isRolling={isRolling} 
             dice={dice} 
@@ -222,6 +232,3 @@ export default function Game() {
 
   return GameContainer();
 }
-
-
-
