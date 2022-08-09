@@ -112,8 +112,9 @@ function ScoreboardSection({isRolling, dice, scores, updateScore, sectionName, f
   return (
     <>
       <h2 className="ScoreSection-title">{sectionName}</h2>
-      {allScoresInSection.map(([scoreName, value]) => 
-        <ScoreRow 
+      {allScoresInSection.map(([scoreName, value], i) => 
+        <ScoreRow
+          key={i}
           isRolling={isRolling} 
           dice={dice} 
           updateScore={updateScore} 

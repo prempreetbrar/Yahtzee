@@ -1,5 +1,5 @@
 .Die-rolling {
-  animation: spin 1s ease-out;
+  animation: spin 1s ease-out forwards;
 }
 
 @keyframes spin {

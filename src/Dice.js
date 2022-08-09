@@ -9,6 +9,7 @@ export default function Dice({dice, isRolling, locked, toggleLockOnDie}) {
     <Box display="flex" flexDirection="row">
       {dice.map((die, i) => 
         <Die 
+          key={i}
           isRolling={isRolling} 
           isLocked={locked[i]} 
           value={die} 
