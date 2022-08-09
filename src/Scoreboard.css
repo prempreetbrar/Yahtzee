@@ -76,7 +76,7 @@
 }
 
 .Scoreboard-restart {
-  animation: restart 1s ease-out;
+  animation: restart 1s ease-out forwards;
 }
 
 @keyframes restart {
