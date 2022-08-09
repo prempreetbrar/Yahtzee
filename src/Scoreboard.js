@@ -136,16 +136,14 @@ function ScoreRow({isRolling, dice, updateScore, scoreName, value}) {
       : isRolling ? "ScoreRow-off"
       : "ScoreRow-active"
     }`;
+  const scoreRowNameClass = value !== null ? "ScoreRow-nameScored" : "ScoreRow-name";
+  const scoreRowScoreClass = value !== null ? "ScoreRow-scored" : "ScoreRow-score";
 
-  const onScoreRowClick = value !== null ? undefined : handleUpdateScore;
-
-  const scoreRowTextStyle = {
-    fontWeight: 300,
-    textDecoration: `${value !== null ? "line-through" : ""}`,
-  }
-  
-  const scoreRowScoreStyle = { fontWeight: `${value !== null ? 500 : 300 }`, color: `${value !== null ? "black" : "#5C7AFF" }`};
-  console.log(scoreName);
+  // if the row has already been scored or the dice are rolling then the user shouldn't be able to score it
+  const onScoreRowClick = isRolling || value !== null ? undefined : handleUpdateScore;
+  /* takes a camel cased string, replaces all capital letters with a space and then the capital letter.
+     However, this means that the first letter is not capitalized (since it doesn't have a space before it),
+     so we manually capitalize it using toUpperCase, and then append to it the remainder of the string */
   const scoreRowName = scoreName.charAt(0).toUpperCase() + scoreName.replace(/([A-Z])/g, " $1").slice(1);
   const scoreRowTooltipStyle = {
     tooltip: {
@@ -156,29 +154,35 @@ function ScoreRow({isRolling, dice, updateScore, scoreName, value}) {
         },
       },
     },
-  } 
+  };
 
   function handleUpdateScore() {
-    updateScore(scoreName, getFunctionBasedOnName(scoreName));
+    updateScore(scoreName, getScoreFunctionBasedOnName(scoreName));
   }
 
-  const thing = getFunctionBasedOnName(scoreName)
-
   return (
-    <Tooltip componentsProps={scoreRowTooltipStyle} title={getMessageBasedOnName(scoreName)} placement="right" arrow>
-      <Box className={scoreRowClass} onClick={!isRolling ? onScoreRowClick : undefined}>
-        <Box sx={scoreRowTextStyle}>{scoreRowName}</Box>
-        <Box sx={scoreRowScoreStyle}>{value !== null ? value : thing(dice)}</Box>
+    <Tooltip componentsProps={scoreRowTooltipStyle} title={getScoreMessageBasedOnName(scoreName)} placement="right" arrow>
+      <Box className={scoreRowClass} onClick={onScoreRowClick}>
+        <Box className={scoreRowNameClass}>{scoreRowName}</Box>
+        {/*If the row hasn't been scored yet, we want to display the potential score to the user (to make it easier for them) */}
+        <Box className={scoreRowScoreClass}>{value !== null ? value : getScoreFunctionBasedOnName(scoreName)(dice)}</Box>
       </Box>
     </Tooltip>
-  )
+  );
 }
 
 
 
 
-function getFunctionBasedOnName(name) {
+
+function getScoreFunctionBasedOnName(name) {
   switch(name) {
+    /* the upper section scoring is identical (summing the dice); the only difference
+       is the number being summed. Because of this, the ScoreCalculator module only
+       has a single function for scoring the upper section (to prevent code repitition).
+       However, this "general" function needs to be modified depending on the row being
+       scored. So, bind is used to "pre-ready" the function by having the associated number
+       being passed in when it is invoked. */
     case "ones": return scoreUpperSection.bind(this, 1);
     case "twos": return scoreUpperSection.bind(this, 2);
     case "threes": return scoreUpperSection.bind(this, 3);
@@ -195,7 +199,8 @@ function getFunctionBasedOnName(name) {
   }
 }
 
-function getMessageBasedOnName(name) {
+
+function getScoreMessageBasedOnName(name) {
   switch(name) {
     case "ones": return "1 point per 1"
     case "twos": return "2 points per 2"
@@ -212,4 +217,3 @@ function getMessageBasedOnName(name) {
     case "yahtzee": return "50 points if all 5 dice are the same";
   }
 }
-

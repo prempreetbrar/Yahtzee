@@ -1,12 +1,67 @@
+.ScoreSection-title {
+  font-weight: 300;
+}
 
 .ScoreRow {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 
-    min-width: 22.5rem;
-    transition: all 0.2s;
-    border-bottom: black solid 0.75px;
+  min-width: 22.5rem;
+  transition: all 0.2s;
+  border-bottom: black solid 0.75px;
+}
+
+.ScoreRow-name {
+  font-weight: 300;
+}
+
+.ScoreRow-nameScored {
+  text-decoration: line-through;
+}
+
+.ScoreRow-score {
+  font-weight: 300;
+  color: rgba(92, 122, 255, 1);
+}
+
+.ScoreRow-scored {
+  font-weight: 500;
+  color: black;
+}
+
+.ScoreRow-disabled {
+  background: linear-gradient(
+    to right,
+    rgba(210, 236, 234, 1) 0%,
+    rgba(210, 236, 234, 1) 0%,
+    rgba(210, 236, 234, 1) 30%,
+    rgba(227, 242, 253, 0.75) 40%
+  );
+  background-size: 300% 300%;
+  animation: slide 1s ease 1;
+}
+
+.ScoreRow-disabled:hover {
+  cursor: not-allowed;
+}
+
+@keyframes slide {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ScoreRow-active:hover {
+  cursor: pointer;
+  background: rgba(227, 242, 253, 0.75);
+}
+
+.ScoreRow-off:hover {
+  cursor: not-allowed;
 }
 
 .Scoreboard-TotalScore {
@@ -20,53 +75,15 @@
   text-align: center;
 }
 
-.ScoreSection-title {
-    font-weight: 300;
-}
-
-.ScoreRow-active:hover {
-    cursor: pointer;
-    background: rgba(227, 242, 253, 0.75);
-}
-
-.ScoreRow-off:hover {
-  cursor: not-allowed;
-}
-
-.ScoreRow-disabled {
-    background: linear-gradient(
-      to right,
-      rgba(210, 236, 234, 1) 0%,
-      rgba(210, 236, 234, 1) 0%,
-      rgba(210, 236, 234, 1) 30%,
-      rgba(227, 242, 253, 0.75) 40%
-    );
-    background-size: 300% 300%;
-    animation: Slide 1s ease 1;
-}
-
-@keyframes Slide {
-    0% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 51%;
-    }
-}
-  
 .Scoreboard-restart {
   animation: restart 1s ease-out;
 }
 
 @keyframes restart {
   0% {
-      transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-      transform: rotate(-360deg);
+    transform: rotate(-360deg);
   }
-}
-
-.ScoreRow-disabled:hover {
-    cursor: not-allowed;
 }

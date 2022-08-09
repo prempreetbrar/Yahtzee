@@ -1,14 +1,14 @@
 .Game-title {
-    width: 100%;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+  width: 100%;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 
-    font-weight: 300;
-    font-size: 5rem;
-    text-align: center;
+  font-weight: 300;
+  font-size: 5rem;
+  text-align: center;
 
-    background-color: rgba(76, 181, 174, 1);
-    color: white;
+  background-color: rgba(76, 181, 174, 1);
+  color: white;
 }
