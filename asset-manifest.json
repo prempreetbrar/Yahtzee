@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Yahtzee/static/css/main.a73c6025.css",
-    "main.js": "/Yahtzee/static/js/main.888b7222.js",
+    "main.css": "/Yahtzee/static/css/main.2ab98249.css",
+    "main.js": "/Yahtzee/static/js/main.a686fc35.js",
     "index.html": "/Yahtzee/index.html",
-    "main.a73c6025.css.map": "/Yahtzee/static/css/main.a73c6025.css.map",
-    "main.888b7222.js.map": "/Yahtzee/static/js/main.888b7222.js.map"
+    "main.2ab98249.css.map": "/Yahtzee/static/css/main.2ab98249.css.map",
+    "main.a686fc35.js.map": "/Yahtzee/static/js/main.a686fc35.js.map"
   },
   "entrypoints": [
-    "static/css/main.a73c6025.css",
-    "static/js/main.888b7222.js"
+    "static/css/main.2ab98249.css",
+    "static/js/main.a686fc35.js"
   ]
 }
