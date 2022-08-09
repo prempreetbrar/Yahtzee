@@ -182,9 +182,6 @@ export default function Game() {
 
       borderRadius: "0.5rem",
       backgroundColor: "rgba(65, 90, 119, 1)",
-      ":hover": {
-        backgroundColor: "rgba(27, 38, 59, 1)",
-      },
 
       fontFamily: "Arial", 
       fontWeight: 300, 
