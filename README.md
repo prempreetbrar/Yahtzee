@@ -1,8 +1,8 @@
 # Yahtzee
-A single player Yahtzee game made using React.js and Material-UI. **Click [*here*](https://prempreetbrar.github.io/Yahtzee/) to 
+A single-player Yahtzee game made using React.js and Material-UI. **Click [*here*](https://prempreetbrar.github.io/Yahtzee/) to 
 try it out!** Or, watch a quick gif of me playing it below:
 
-![](To-Do-List-Demo.gif)
+![](Yahtzee.gif)
 
 ## Features
 
@@ -12,13 +12,12 @@ try it out!** Or, watch a quick gif of me playing it below:
   mouse click won't ruin your game :)
 - Your high score is saved in local storage; you can safely close the tab, browser, turn off your computer, etc; your high score only
   gets erased if you clear your cookies
-- The potential score on each avialable row is shown to you, so you don't need to do the math yourself
+- The potential score on each available row is shown to you, so you don't need to do the math yourself
   
 ## Limitations/Design Choices
 
 - I rarely use arrow functions; I want to be as explicit as I can when possible, and only use arrow functions for callbacks or when necessary.  In a class component, I would use an arrow function so I don't have to explicitly bind ```this```, but this is not a concern in a functional component.
-- I used primitive HTML elements where I could, and only used Material UI (MUI) where it made sense. Certain MUI
-  styles are specified in-line rather than on the stylesheet; this is only in the places where it was an MUI requirement.
+- Certain MUI styles are specified in-line rather than on the stylesheet; this is only in the places where it was an MUI requirement.
 - I was originally going to make the game multiplayer, but then would have had to come up with a good AI. This would have sidetracked me from my original goal, which was to practice React.
 - The dice rolling uses CSS animations; at the time I am writing this, I've ensured the animation works in every browser. However, if a browser changes its implementations, the animation may not work exactly as seen in the GIF.
 
@@ -41,7 +40,7 @@ try it out!** Or, watch a quick gif of me playing it below:
 
 5. Check if you have node installed by running ```node --version``` in the terminal. If not, open the .msi installation package and click "repair." Follow the steps.
 
-6. Click on the green button on the top right that says "Code". Click download ZIP, unzip the file, right click on the *Yahtzee-master* folder and select *copy as path*. Open up a terminal and write
+6. Click on the green button on the top right that says "Code". Click download ZIP, unzip the file, right-click on the *Yahtzee-master* folder and select *copy as path*. Open up a terminal and write
 
 ```
 cd <putThePathYouCopiedHereUsingControlV (without the angle brackets)>
@@ -66,7 +65,7 @@ in the terminal.
 
 3. Check if you have node and npm installed by running ```node --version``` and ```npm --version``` in the terminal. If not, repeat step 2.
     
-4. Click on the green button on the top right that says "Code". Click download ZIP, right click on the *Yahtzee-master* folder, click *Get Info*, copy the path (the text beside *Where*): 
+4. Click on the green button on the top right that says "Code". Click download ZIP, right-click on the *Yahtzee-master* folder, click *Get Info*, copy the path (the text beside *Where*): 
 ![image](https://user-images.githubusercontent.com/89614923/183583013-eeee8c07-bf56-458a-aa56-b62ffd0c9c58.png)
 
 
@@ -108,4 +107,4 @@ This will open up Yahtzee using your computer as a host in your default browser.
     npm start
     ```
 
-This will open up the Yahtzee using your computer as a host in your default browser. (It may take up to a minute to load when starting the app up initially).
+This will open up Yahtzee using your computer as a host in your default browser. (It may take up to a minute to load when starting the app up initially).
