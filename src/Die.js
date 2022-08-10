@@ -14,7 +14,7 @@ export default function Die({isRolling, isLocked, value, i, toggleLockOnDie}) {
   const iconButtonClass = !isLocked && isRolling ? "Die-rolling" : "";
   // MUI button doesn't have className
   const iconButtonStyle = {
-    disableElevation: false,
+    disableElevation: true,
     backgroundColor: "rgba(76, 181, 174, 1)",
     "&.MuiButtonBase-root:hover": {
       backgroundColor: "rgba(76, 181, 174, 1)"
